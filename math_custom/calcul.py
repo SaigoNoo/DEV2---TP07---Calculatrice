@@ -1,40 +1,29 @@
-from math_custom import Simplifier
-
-
-class Calcul(Simplifier):
-    def __init__(self):
+class Fraction:
+    def __init__(self, numerateur: int, denominateur: int):
         self.total = 0
+        self.numerateur = numerateur
+        self.denominateur = denominateur
 
-    @staticmethod
-    def fract_to_tuple(frac_ent: str) -> tuple:
+    def __add__(self, frac2: object) -> object:
         """
-        Méthode qui convertit une fraction stringifiée en tuple.
-        En effet, lors de la déclaration de la fraction dans le main, on recoit des strings, et donc,
-        les num et den ne sont pas des integer et aucune operation n'est alors possible.
-        C'est donc à ca que sert cette méthode, formater une fraction en tuple tout en changant le type des chiffres en int.
-        On en profite aussi pour convertir les entiers comme 5 en fraction (5, 1) pour avoir un format standard.
-        :param frac_ent: fraction ou entier de type string
-        :return: tuple de la fraction ou les nums et dens sont de type int.
-        """
-        if "/" in frac_ent:
-            num = int(frac_ent.split("/")[0].strip())
-            den = int(frac_ent.split("/")[1].strip())
-            return num, den
-        else:
-            return int(frac_ent.strip()), 1
-
-    def somme(self, frac_1: tuple, frac_2: tuple) -> tuple:
-        """
-        Effectue un somme de 2 tuples (fractions).
-        La seule particularitée de cette méthode est que si les dens sont identiques, on ne fait que la somme des numerateurs
-        sinon on multiplie les den entre eux tout en multipliant les numerateurs avec leur denominateurs
+        Effectue un somme de 2 objets (fractions).
         Une fois fini, on simplifie le résultat si simplifiable.
-        :param frac_1: La fraction attendue doit être de type tuple, et le contenu des tuples doivent être des integers
-        :param frac_2: La fraction attendue doit être de type tuple, et le contenu des tuples doivent être des integers
-        :return: Renvoie la fraction sous forme de tuple. Garantie que la fraction est simplifiée a son maximum
+        Si les 2 denominateurs sont communs, on pourra conserver le même dénominateur au final
+
+        __PRE__:
+        - self.num1 doit être de type integer, initialisée ou non None
+        - self.den1 doit être de type integer, initialisée ou non None
+        - self.num2 doit être de type integer, initialisée ou non None provenant d'un objet
+        - self.den2 doit être de type integer, initialisée ou non None provenant d'un objet
+
+        __POST__:
+        - self.numerateur ne sera pas réécrit et conservera sa valeur initiale
+        - self.denominateur ne sera pas réécrit et conservera sa valeur initiale
+        - frac 2 ne sera pas alteré
+        - Un objet Fraction sera retourné
         """
-        num1, num2 = frac_1[0], frac_2[0]
-        den1, den2 = frac_1[1], frac_2[1]
+        num1, num2 = self.numerateur, frac2.numerateur
+        den1, den2 = self.denominateur, frac2.denominateur
         if den1 == den2:
             num = num1 + num2
             den = den1
@@ -42,53 +31,179 @@ class Calcul(Simplifier):
             num = (num1 * den2) + (num2 * den1)
             den = den1 * den2
 
-        self.total = self.simplifier_values(fraction=(num, den))
-        return self.total
+        return Fraction(
+            numerateur=num,
+            denominateur=den
+        ).simplifier_values()
 
-    def soustraction(self, frac_1: tuple, frac_2: tuple) -> tuple:
+    def __sub__(self, frac2: object) -> object:
         """
-        Effectue un soustraction de 2 tuples (fractions).
+        Effectue un soustraction de 2 objets (fractions).
         Une fois fini, on simplifie le résultat si simplifiable.
-        :param frac_1: La fraction attendue doit être de type tuple, et le contenu des tuples doivent être des integers
-        :param frac_2: La fraction attendue doit être de type tuple, et le contenu des tuples doivent être des integers
-        :return: Renvoie la fraction sous forme de tuple. Garantie que la fraction est simplifiée a son maximum
-        """
-        num1, num2 = frac_1[0], frac_2[0]
-        den1, den2 = frac_1[1], frac_2[1]
-        num = (num1 * den2) - (num2 * den1)
-        den = den1 * den2
+        Si les 2 denominateurs sont communs, on pourra conserver le même dénominateur au final
 
-        self.total = self.simplifier_values(fraction=(num, den))
-        return self.total
+        __PRE__:
+        - self.num1 doit être de type integer, initialisée ou non None
+        - self.den1 doit être de type integer, initialisée ou non None
+        - self.num2 doit être de type integer, initialisée ou non None provenant d'un objet
+        - self.den2 doit être de type integer, initialisée ou non None provenant d'un objet
 
-    def division(self, frac_1: tuple, frac_2: tuple) -> tuple:
+        __POST__:
+        - self.numerateur ne sera pas réécrit et conservera sa valeur initiale
+        - self.denominateur ne sera pas réécrit et conservera sa valeur initiale
+        - frac 2 ne sera pas alteré
+        - Un objet Fraction sera retourné
         """
-        Effectue un division de 2 tuples (fractions).
+        num1, num2 = self.numerateur, frac2.numerateur
+        den1, den2 = self.denominateur, frac2.denominateur
+
+        if den1 == den2:
+            num = num1 - num2
+            den = den1
+        else:
+            num = (num1 * den2) - (num2 * den1)
+            den = den1 * den2
+
+        return Fraction(
+            numerateur=num,
+            denominateur=den
+        ).simplifier_values()
+
+    def __truediv__(self, frac2) -> object:
+        """
+        Effectue un division de 2 objets (fractions).
         Une fois fini, on simplifie le résultat si simplifiable.
-        :param frac_1: La fraction attendue doit être de type tuple, et le contenu des tuples doivent être des integers
-        :param frac_2: La fraction attendue doit être de type tuple, et le contenu des tuples doivent être des integers
-        :return: Renvoie la fraction sous forme de tuple. Garantie que la fraction est simplifiée a son maximum
+
+        __PRE__:
+        - self.num1 doit être de type integer, initialisée ou non None
+        - self.den1 doit être de type integer, initialisée ou non None
+        - self.num2 doit être de type integer, initialisée ou non None provenant d'un objet
+        - self.den2 doit être de type integer, initialisée ou non None provenant d'un objet
+
+        __POST__:
+        - self.numerateur ne sera pas réécrit et conservera sa valeur initiale
+        - self.denominateur ne sera pas réécrit et conservera sa valeur initiale
+        - frac 2 ne sera pas alteré
+        - Un objet Fraction sera retourné
         """
-        num1, num2 = frac_1[0], frac_2[0]
-        den1, den2 = frac_1[1], frac_2[1]
+        num1, num2 = self.numerateur, frac2.numerateur
+        den1, den2 = self.denominateur, frac2.denominateur
         num = num1 * den2
         den = den1 * num2
 
-        self.total = self.simplifier_values(fraction=(num, den))
-        return self.total
+        # Retourner un nouvel objet de la classe Fraction avec les valeurs calculées
+        return Fraction(num, den).simplifier_values()
 
-    def multiplication(self, frac_1: tuple, frac_2: tuple) -> tuple:
+    def __mul__(self, frac2) -> object:
         """
-        Effectue un multiplication de 2 tuples (fractions).
+        Effectue un multiplication de 2 objets (fractions).
         Une fois fini, on simplifie le résultat si simplifiable.
-        :param frac_1: La fraction attendue doit être de type tuple, et le contenu des tuples doivent être des integers
-        :param frac_2: La fraction attendue doit être de type tuple, et le contenu des tuples doivent être des integers
-        :return: Renvoie la fraction sous forme de tuple. Garantie que la fraction est simplifiée a son maximum
+
+        __PRE__:
+        - self.num1 doit être de type integer, initialisée ou non None
+        - self.den1 doit être de type integer, initialisée ou non None
+        - self.num2 doit être de type integer, initialisée ou non None provenant d'un objet
+        - self.den2 doit être de type integer, initialisée ou non None provenant d'un objet
+
+        __POST__:
+        - self.numerateur ne sera pas réécrit et conservera sa valeur initiale
+        - self.denominateur ne sera pas réécrit et conservera sa valeur initiale
+        - frac 2 ne sera pas alteré
+        - Un objet Fraction sera retourné
         """
-        num1, num2 = frac_1[0], frac_2[0]
-        den1, den2 = frac_1[1], frac_2[1]
+        num1, num2 = self.numerateur, frac2.numerateur
+        den1, den2 = self.denominateur, frac2.denominateur
+
         num = num1 * num2
         den = den1 * den2
 
-        self.total = self.simplifier_values(fraction=(num, den))
-        return self.total
+        return Fraction(num, den).simplifier_values()
+
+    def checker_erreur(self) -> dict:
+        """
+        Méthode de vérification de validité de fractions
+        Cette vérification est effectuée à l'initialisation de cet objet
+
+        __PRE:__
+        - self.numerateur doit être de type integer, intialisée ou non None
+        - self.denominateur doit être de type integer, intialisée ou non None
+
+        __POST:__
+        - Aucune valeur n'est modifiée
+        - Un dictionnaire non stocké et non permanent est renvoyé
+        """
+        # Dénominateur à 0
+        if self.denominateur == 0:
+            return {
+                "signal": 1,
+                "reason": "DEN_IS_0"
+            }
+
+        # Si fraction contient des valeurs qui ne sont pas des chiffres
+        if type(self.numerateur) is not int or type(self.denominateur) is not int:
+            return {
+                "signal": 1,
+                "reason": "FRACT_NO_INT"
+            }
+
+        # Si tout est OK
+        return {
+            "signal": 0,
+            "reason": "ALL_OK"
+        }
+
+    def gcd(self) -> int:
+        """
+        self.gcd pour grand commun diviseur, fonctionne en complément de la méthode self.simplifier_values.
+        La condition pour quitter le while est d'avoir un reste a 0.
+        Dès lors que ce reste sera à 0, num et den aura alors son facteur le plus grand
+
+        **Reference**: Théoreme d'Euclide
+
+        __PRE:__
+        - self.numerateur doit être de type integer, intialisée ou non None
+        - self.denominateur doit être de type integer, intialisée ou non None
+
+        __POST:__
+        - Les variables self.denominateur et self.numerateur ne sont pas impactées
+        - Seul un integer étant un facteur de division va être résulté, cette valeur n'est pas stockée
+        """
+        num, den = self.numerateur, self.denominateur
+        while den:
+            num, den = den, num % den
+        return num
+
+    def simplifier_values(self) -> tuple:
+        """
+        Cette méthode permet de simplifier une fraction à sa plus petite valeur possible.
+        Cette méthode est étroitement liée à gcd.
+
+        __PRE:__
+        - self.numerateur doit être de type integer, initialisée ou non None
+        - self.denominateur doit être de type integer, initialisée ou non None
+        - quelque soit la valeur de self.gcd, il y aura ou non simplification
+
+        __POST:__
+        - self.numerateur sera réécrit et ne conservera pas sa valeur initiale
+        - self.denominateur sera réécrit et ne conservera pas sa valeur initiale
+        """
+        facteur_commun = self.gcd()
+        self.numerateur //= facteur_commun
+        self.denominateur //= facteur_commun
+
+        return self.numerateur, self.denominateur
+
+    def __str__(self) -> str:
+        """
+        Simplement réafficher une fraction simple
+
+        __PRE__:
+        - self.numerateur doit être de type integer, initialisée ou non None
+        - self.denominateur doit être de type integer, initialisée ou non None
+
+        __POST__:
+        - self.numerateur ne sera pas réécrit et conservera sa valeur initiale
+        - self.denominateur ne sera pas réécrit et conservera sa valeur initiale
+        :return:
+        """
+        return self.numerateur if self.denominateur == 1 else f"{self.numerateur}/{self.denominateur}"
