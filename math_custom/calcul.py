@@ -119,7 +119,7 @@ class Fraction:
 
         return Fraction(num, den).simplifier_values()
 
-    def checker_erreur(self) -> dict:
+    def checker_erreur(self, is_frac_2: bool) -> dict:
         """
         Méthode de vérification de validité de fractions
         Cette vérification est effectuée à l'initialisation de cet objet
@@ -144,6 +144,12 @@ class Fraction:
             return {
                 "signal": 1,
                 "reason": "FRACT_NO_INT"
+            }
+
+        if is_frac_2 and self.numerateur == 0:
+            return {
+                "signal": 1,
+                "reason": "FRACT2_NUM_IS_0"
             }
 
         # Si tout est OK

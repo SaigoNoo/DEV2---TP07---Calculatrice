@@ -68,8 +68,8 @@ if __name__ == "__main__":
             )
 
             # Check de la fraction
-            if fraction_une.checker_erreur()["signal"] == 1:
-                print(f"Erreur: {fraction_une.checker_erreur()['reason']}")
+            if fraction_une.checker_erreur(is_frac_2=False)["signal"] == 1:
+                print(f"Erreur: {fraction_une.checker_erreur(is_frac_2=False)['reason']}")
                 continue
 
             # Seconde Fraction
@@ -83,8 +83,8 @@ if __name__ == "__main__":
             )
 
             # Check de la fraction
-            if fraction_deux.checker_erreur()["signal"] == 1:
-                print(f"Erreur: {fraction_deux.checker_erreur()['reason']}")
+            if fraction_deux.checker_erreur(is_frac_2=True)["signal"] == 1:
+                print(f"Erreur: {fraction_deux.checker_erreur(is_frac_2=True)['reason']}")
                 continue
 
             # Operateur
