@@ -1,6 +1,8 @@
 from math_custom import Fraction
 from os import system
 from platform import system as os
+from rich.console import Console
+from rich.panel import Panel
 
 
 def commande(string: str) -> str:
@@ -31,6 +33,7 @@ def clear():
 
 
 if __name__ == "__main__":
+    clear()
     first_help = True
     while True:
         if first_help:
@@ -47,7 +50,7 @@ if __name__ == "__main__":
                   "+------------------------------------------------------+\n"
                   "|  !h                ->   Mode aide                    |\n"
                   "|  !q                ->   Quitter le mode calculette   |\n"
-          "|  !c                ->   Faire un calcul simple       |\n"
+                  "|  !c                ->   Faire un calcul simple       |\n"
                   "+------------------------------------------------------+\n"
                   )
             continue
@@ -92,32 +95,33 @@ if __name__ == "__main__":
                 string=f"Quelle opération voulez-vous effectuer [+ - * /]"
             ).strip()
 
+            result = 0
+
             # Faire une opération entre ces 2 fractions
             if operateur == '+':
                 result = fraction_une + fraction_deux
-                operateur = "somme"
+                operateur = "Somme"
 
             elif operateur == '-':
                 result = fraction_une - fraction_deux
-                operateur = "soustraction"
+                operateur = "Soustraction"
 
             elif operateur == '/':
                 result = fraction_une / fraction_deux
-                operateur = "division"
+                operateur = "Division"
 
             elif operateur == '*':
                 result = fraction_une * fraction_deux
-                operateur = "multiplication"
+                operateur = "Multiplication"
 
-            len_space = len(
-                f"   Résultat de la {operateur} entre {fraction_une} et {fraction_deux}      ")
-            print(
-                f"\n+{'-' * len_space}+\n"
-                f"|   Résultat de la {operateur} entre {fraction_une} et {fraction_deux}      |\n"
-                f"|{' ' * len_space}|\n"
-                f"|   Réponse: {result}{' ' * (len_space - len(f'   Réponse: {result}'))}|\n"
-                f"+{'-' * len_space}+\n"
-            )
+            print("")
+            response = Panel.fit(
+                f"Fraction 1: {fraction_une}\n"
+                f"Fraction 2: {fraction_deux}\n"
+                f"Operateur: {operateur}\n"
+                f"Réponse finale: {result.__str__()}",
+                title=f"Résultat", width=1000)
+            Console(record=True).print(response)
 
         else:
             print(f"ERREUR: {command} n'est pas une instruction connue...")

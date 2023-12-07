@@ -212,4 +212,4 @@ class Fraction:
         - self.denominateur ne sera pas réécrit et conservera sa valeur initiale
         :return:
         """
-        return self.numerateur if self.denominateur == 1 else f"{self.numerateur}/{self.denominateur}"
+        return f"{self.numerateur}" if self.denominateur == 1 else f"{self.numerateur}/{self.denominateur}"
